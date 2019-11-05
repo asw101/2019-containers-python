@@ -1,0 +1,28 @@
+{
+  "extensions": [
+    "ms-vscode.Go",
+    "ms-python.python",
+    "rust-lang.rust",
+    "asw101.hello-keymap"
+  ],
+  // Run Bash script in .devcontainer directory
+  "postCreateCommand": "/bin/bash ./.devcontainer/post-create.sh > ~/post-create.log",
+  // "settings": {
+  //   "editor.suggestSelection": "first",
+  //   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  //   "editor.fontSize": 18,
+  //   "terminal.integrated.fontSize": 18,
+  //   "go.formatTool": "goimports",
+  //   "go.useLanguageServer": true,
+  //   "workbench.editor.showTabs": true,
+  //   "explorer.confirmDragAndDrop": false
+  // },
+  // "image": "mcr.microsoft.com/azure-cli",
+  "dockerFile": "Dockerfile"
+  // "context": "..",
+  // "isInternal": true,
+  // "experimentalFeatures": {
+  //   "customContainers": true
+  // }
+  // "appPort": 8080
+}

@@ -1,0 +1,7 @@
+{
+    "name": "hello-tf",
+    "dockerFile": "jupyter.Dockerfile",
+    "extensions": [
+        "ms-python.python"
+    ]
+}

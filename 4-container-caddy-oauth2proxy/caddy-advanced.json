@@ -1,0 +1,50 @@
+{
+    "admin": {
+        "disabled": true
+    },
+    "logging": {
+        "sink": {
+            "writer": {
+                "output": "discard"
+            }
+        },
+        "logs": {
+            "default": {
+                "writer": {
+                    "output": "stderr"
+                },
+                "encoder": {
+                    "format": "json"
+                },
+                "level": "info",
+                "sampling": {},
+                "include": [],
+                "exclude": []
+            }
+        }
+    },
+    "apps": {
+        "http": {
+            "http_port": 80,
+            "https_port": 443,
+            "grace_period": "10s",
+            "servers": {
+                "example": {
+                    "listen": [
+                        "127.0.0.1:2080"
+                    ],
+                    "routes": [
+                        {
+                            "handle": [
+                                {
+                                    "handler": "file_server",
+                                    "browse": {}
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

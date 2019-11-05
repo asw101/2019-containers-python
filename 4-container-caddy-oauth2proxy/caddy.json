@@ -1,0 +1,23 @@
+{
+    "apps": {
+        "http": {
+            "servers": {
+                "example": {
+                    "listen": [
+                        "127.0.0.1:2080"
+                    ],
+                    "routes": [
+                        {
+                            "handle": [
+                                {
+                                    "handler": "file_server",
+                                    "browse": {}
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
