@@ -1,0 +1,10 @@
+{
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "editor.fontSize": 18,
+    "terminal.integrated.fontSize": 18,
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": true,
+    "workbench.editor.showTabs": true,
+    "explorer.confirmDragAndDrop": false
+}
