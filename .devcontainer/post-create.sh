@@ -1,3 +1,3 @@
 echo "hello world"
-cp keybindings.json /User/keybindings.json
-#cp settings.json /User/settings.json
+cp .devcontainer/keybindings.json /User/keybindings.json
+#cp .devcontainer/settings.json /User/settings.json
