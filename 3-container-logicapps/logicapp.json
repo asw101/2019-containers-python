@@ -1,0 +1,100 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Create_container_group": {
+                "inputs": {
+                    "body": {
+                        "location": "eastus",
+                        "properties": {
+                            "containers": [
+                                {
+                                    "name": "container1",
+                                    "properties": {
+                                        "environmentVariables": [
+                                            {
+                                                "name": "LISTEN_PORT",
+                                                "value": "80"
+                                            }
+                                        ],
+                                        "image": "...",
+                                        "ports": [
+                                            {
+                                                "port": 80,
+                                                "protocol": "TCP"
+                                            }
+                                        ],
+                                        "resources": {
+                                            "requests": {
+                                                "cpu": 1,
+                                                "memoryInGB": 1
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            "imageRegistryCredentials": [
+                                {
+                                    "password": "...",
+                                    "server": "...",
+                                    "username": "..."
+                                }
+                            ],
+                            "ipAddress": {
+                                "ports": [
+                                    {
+                                        "port": 80,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "type": "Public"
+                            },
+                            "osType": "Linux",
+                            "restartPolicy": "OnFailure"
+                        }
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['aci']['connectionId']"
+                        }
+                    },
+                    "method": "put",
+                    "path": "/subscriptions/@{encodeURIComponent('b9840869-8266-4fc8-8060-cfb339c08284')}/resourceGroups/@{encodeURIComponent('191100-python')}/providers/Microsoft.ContainerInstance/containerGroups/@{encodeURIComponent('logicapp1-container1')}",
+                    "queries": {
+                        "x-ms-api-version": "2017-10-01-preview"
+                    }
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "aci": {
+                    "connectionId": "/subscriptions/b9840869-8266-4fc8-8060-cfb339c08284/resourceGroups/191100-python/providers/Microsoft.Web/connections/aci",
+                    "connectionName": "aci",
+                    "id": "/subscriptions/b9840869-8266-4fc8-8060-cfb339c08284/providers/Microsoft.Web/locations/eastus/managedApis/aci"
+                }
+            }
+        }
+    }
+}
