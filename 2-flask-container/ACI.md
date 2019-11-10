@@ -32,3 +32,7 @@ echo "http://${CONTAINER_INSTANCE_FQDN}"
 # load test with hey
 hey "http://${CONTAINER_INSTANCE_FQDN}"
 ```
+
+## Resources
+- https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart
+- https://docs.microsoft.com/en-us/learn/modules/run-docker-with-azure-container-instances/
