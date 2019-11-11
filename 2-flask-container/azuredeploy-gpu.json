@@ -1,0 +1,177 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aciName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for the container group"
+            },
+            "defaultValue": "aci1"
+        },
+        "dnsPrefix": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "image": {
+            "type": "string",
+            "metadata": {
+                "description": "Container image to deploy. Should be of the form accountName/imagename:tag for images stored in Docker Hub or a fully qualified URI for a private registry like the Azure Container Registry."
+            },
+            "defaultValue": "aaronmsft/hello-echo"
+        },
+        "command": {
+            "type": "array",
+            "metadata": {
+                "description": ""
+            },
+            "defaultValue": []
+        },
+        "port": {
+            "type": "string",
+            "metadata": {
+                "description": "Port to open on the container and the public IP address."
+            },
+            "defaultValue": "80"
+        },
+        "cpuCores": {
+            "type": "string",
+            "metadata": {
+                "description": "The number of CPU cores to allocate to the container. Must be an integer."
+            },
+            "defaultValue": "1.0"
+        },
+        "memoryInGb": {
+            "type": "string",
+            "metadata": {
+                "description": "The amount of memory to allocate to the container in gigabytes."
+            },
+            "defaultValue": "0.5"
+        },
+        "gpuCount": {
+            "type": "string",
+            "metadata": {
+                "description": "The number of GPUs to allocate."
+            },
+            "defaultValue": "0",
+            "allowedValues": ["0", "1", "2", "4"]
+        },
+        "gpuSku": {
+            "type": "string",
+            "metadata": {
+                "description": "The GPU SKU to allocate to this container instance."
+            },
+            "defaultValue": "K80",
+            "allowedValues": ["K80", "P100", "V100"]
+        },
+        "registryAuth": {
+            "type": "string",
+            "defaultValue": "public",
+            "allowedValues": ["public", "private", "acr"]
+        },
+        "registryServer": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "registryUsername": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "registryPassword": {
+            "type": "securestring",
+            "defaultValue": ""
+        }
+    },
+    "variables": {
+        "identityName": "[concat(resourceGroup().name, '-identity')]",
+        "dnsPrefix": "[if(equals(parameters('dnsPrefix'), ''), concat(parameters('aciName'), '-', uniqueString(resourceGroup().id)), parameters('dnsPrefix'))]",
+        "privateAuth": [{
+            "server": "[parameters('registryServer')]",
+            "username": "[parameters('registryUsername')]",
+            "password": "[parameters('registryPassword')]"
+        }],
+        "gpu": {
+            "count": "[parameters('gpuCount')]",
+            "sku": "[parameters('gpuSku')]"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "name": "[variables('identityName')]",
+            "apiVersion": "2018-11-30",
+            "location": "[resourceGroup().location]"
+        },
+        {
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "name": "[parameters('aciName')]",
+            "apiVersion": "2018-10-01",
+            "location": "[parameters('location')]",
+            "identity": {
+                "type": "UserAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('identityName'))]": {}
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('identityName'))]"
+            ],
+            "properties": {
+                "containers": [
+                    {
+                        "name": "[concat(parameters('aciName'), '-1')]",
+                        "properties": {
+                            "image": "[parameters('image')]",
+                            "command": "[parameters('command')]",
+                            "ports": [
+                                {
+                                    "port": "[parameters('port')]"
+                                }
+                            ],
+                            "environmentVariables":[
+                                {"name": "HTTP_PLATFORM_PORT", "value": "80"}
+                            ],
+                            "resources": {
+                                "requests": {
+                                    "cpu": "[parameters('cpuCores')]",
+                                    "memoryInGb": "[parameters('memoryInGb')]",
+                                    "gpu": "[if(equals(parameters('gpuCount'), '0'), json('{}'), variables('gpu'))]"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "imageRegistryCredentials": 
+                    "[if(equals(parameters('registryAuth'), 'public'), json('[]'), variables('privateAuth'))]"
+                ,
+                "osType": "Linux",
+                "ipAddress": {
+                    "type": "Public",
+                    "dnsNameLabel": "[variables('dnsPrefix')]",
+                    "ports": [
+                        {
+                            "protocol": "tcp",
+                            "port": "[parameters('port')]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "aci": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('aciName')), '2018-02-01-preview')]"
+        }
+    }
+}
