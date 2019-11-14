@@ -1,4 +1,4 @@
-# aka.ms/pycon-ca-2019
+# aka.ms/2019-pycon-ca
 
 ## Visual Studio Online
 
