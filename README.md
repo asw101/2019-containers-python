@@ -9,7 +9,7 @@
 1. Under `Create a Billing Plan` click `Advanced Options`. [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-007a.png)
 1. Under `Resource Group` you will need to enter `Group-N`, where **N** is the **number** in your email. For example, if your login email is `user-75@azrhack.onmicrosoft.com`, you should enter `Group-75`. [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-009a.png). You only have to do this step *once*.
 1. Under `Create Environment` enter `Environment Name`: `my-vso` (this can be anything). [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-010a.png). [[2]](https://180300static.blob.core.windows.net/github/191100-images/image-011a.png)
-1. Under `Git Repository`: enter `asw101/2019-python-containers`. [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-011a.png)
+1. Under `Git Repository`: enter `asw101/2019-containers-python` **OR** `asw101/pycon-ca`. [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-011a.png)
 1. Click `Create`.
 1. You can see the environment `my-vso` will have been created. It will say `Creating`. [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-013a.png)
 1. When the status is *green* and says `Available` you can click on `my-vso` or `Connect` from the menu. [[1]](https://180300static.blob.core.windows.net/github/191100-images/image-014a.png)
